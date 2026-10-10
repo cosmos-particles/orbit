@@ -57,17 +57,17 @@ for arg in "$@"; do
   esac
 done
 
-if [[ "$SERVICE" == "github" ]]; then
+if [[ "$SERVICE" == github* ]]; then
 	source ${CROC}/github.sh; load-github-app
   MISSING_APP_VARS=()
   for var in GITHUB_APP_ID GITHUB_APP_INSTALLATION_ID GITHUB_APP_PEM_FILE; do
     [[ -n "${!var:-}" ]] || MISSING_APP_VARS+=("$var")
   done
   if [[ ${#MISSING_APP_VARS[@]} -gt 0 ]]; then
-    echo "Error: missing required env var(s) for the github stack: ${MISSING_APP_VARS[*]}" >&2
+    echo "Error: missing required env var(s) for the $SERVICE stack: ${MISSING_APP_VARS[*]}" >&2
     cat <<EOF >&2
 
-Export these before running '$0 github ...':
+Export these before running '$0 $SERVICE ...':
   export GITHUB_APP_ID=...
   export GITHUB_APP_INSTALLATION_ID=...
   export GITHUB_APP_PEM_FILE="\$(cat /path/to/key.pem)"
